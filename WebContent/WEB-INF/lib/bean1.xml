@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.1.xsd
+		http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-4.1.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.1.xsd" >
+		<!-- 使用无参数的构造方法创建类对象 -->
+		<bean id="bean1" class="spring.ioc.chap2.Bean1" scope="prototype" ></bean>
+		<bean id="bean11" class="spring.ioc.chap2.Bean1"> </bean>
+		<!-- 使用静态工厂创建类对象 -->
+		<bean id="bean2" class="spring.ioc.chap1.UserStaticFatory" factory-method="getService" />
+		<!-- 使用实例工厂（非静态）创建类对象 -->
+		<bean id="bean3factory" class="spring.ioc.chap2.UserFactory"/>
+        <bean id="bean3" factory-bean="bean3factory" factory-method="getService"/>
+         <!-- 使用构造方法注入属性值 -->
+		<bean id="propertyDemo1" class="spring.ioc.property.PropertyDemo1">
+		   <constructor-arg name="userName" value="wang.qj"></constructor-arg>
+		</bean>
+		 <!-- 使用属性的set方法注入属性值 -->
+		<bean id="propertyDemo2" class="spring.ioc.property.PropertyDemo2">
+		<property name="userName" value="王秋菊"></property>
+		</bean>
+		 <!-- 注入对象类型的属性 -->
+	    <bean id="userDao" class="spring.ioc.property.UserDao"></bean>
+	    <bean id="userService" class="spring.ioc.property.UserService">
+	        <property name="userDao" ref="userDao"></property>
+	    </bean>
+	    <bean id="user1" class="spring.ioc.chap2.User">
+	        <property name="userName" value="wang.qj"></property>
+	        <property name="userPwd" value="wqj123456"></property>
+	    </bean>
+	   <bean id="springIocTest2" class="spriing.ioc.othertype.SpringIocTest2">
+	       <!-- list注入引用对象  <ref bean="user1"/>-->
+	       <property name="userList">
+	          <list>
+	              <ref bean="user1"/>
+	          </list>
+	       </property>
+	       <!-- list注入简单对象 string  <value>-->
+	       <property name="strList">
+	          <list>
+	               <value>str123</value>
+	               <value>str456</value>
+	          </list>
+	       </property>
+	       <!-- map类型注入 -->
+	       <!-- map里是简单类型 key/value  key的类型要与bean属性里map的key类型匹配，否则会产生异常
+	       value属性指定值 
+	       -->
+	       <property name="strMap">
+	       <map>
+	       <entry  key="string123" value="wangqj123"></entry>
+	       </map>
+	       
+	       </property>
+	       <!-- map类型注入，value为引用类型的情况，用value-ref属性指定引用的bean -->
+	       <property name="userMap">
+	       <map>
+	       <entry key="user1" value-ref="user1" ></entry>
+	       </map>
+	       </property>
+	   </bean>
+	   
+	   
+	   
+	   
+	   
+	   
+	   
+	    
+	    
+	    
+	    
+	    
+	    
+	    <bean id="otherTypeTest" class="spriing.ioc.othertype.OtherTypeTest">
+	    <!-- 数组注入 -->
+	    <property name="state">
+	    <null/>
+	    </property>
+	    <property name="arrs">
+	        <list>
+	             <value>1</value>
+	             <value>2</value>
+	             <value>3</value>
+	             <value>4</value>
+	        </list>
+	    </property>
+	    <property name="list">
+	    <list>
+	             <value>list1</value>
+	             <value>list2</value>
+	             <value>list3</value>
+	             <value>list4</value>
+	        </list>
+	    </property>
+	    <property name="map">
+	        <map>
+	           <entry key="key1" value="v1"></entry>
+	           <entry key="key2" value="v2"></entry>
+	           <entry key="key3" value="v3"></entry>
+	        </map>
+	    </property>
+	    <property name="prop">
+	       <props>
+	          <prop key="username">root</prop>
+	          <prop key="pwd">123456</prop>
+	       </props>
+	    </property>
+	    <property name="sets">
+	      <set>
+	         <value>s1</value>
+	         <value>s2</value>
+	       </set>
+	    </property>
+	    </bean>
+	    
+	    <!-- 配置AOP -->
+	    <!-- 1】配置对象 -->
+	    <bean id="book" class="spring.aop.chap1.Book"></bean>
+	    <bean id="myBook" class="spring.aop.chap1.MyBook"></bean>
+	     <!--2 】配置AOP -->
+	    <aop:config>
+	           <!-- 配置切入点 expression表达式  id给切入点起个名字-->
+	       <aop:pointcut expression="execution(* spring.aop.chap1.Book.add(..))" id="pointcut1"/>
+	          <!-- 配置切面 ref增强类-->
+	       <aop:aspect ref="myBook">
+	           <!-- 配置增加类型 method使用哪个方法做为前置增强类 pointcut-ref 配置切入点-->
+	        <!--   <aop:before method="befor1" pointcut-ref="pointcut1"/> -->
+	          <!-- 当有配置around时,after和after-returning的执行顺序和它们在xml文件中配置顺序相反 -->
+	         <!--  <aop:after method="after" pointcut-ref="pointcut1"/>
+	          <aop:after-returning method="afterreturn" pointcut-ref="pointcut1"/>
+	          <aop:after-throwing method="afterthrow" pointcut-ref="pointcut1" /> -->
+	          <aop:around method="around" pointcut-ref="pointcut1" />
+	       </aop:aspect>
+	    </aop:config>  
+	    <!--bean的继承  -->
+	     <bean id="parent" class="spring.ioc.chap2.User" abstract="true" >
+	    	<property name="userName" value="王秋菊"/>
+	    </bean>
+	    <bean id="child2" class="spring.ioc.chap2.User"  parent="parent">	    	
+	    	<property name="userPwd" value="bb"/>
+	    </bean>
+	    <bean id="child3" class="spring.ioc.chap2.User"  parent="parent">
+	    	<property name="userPwd" value="aa"/>
+	    </bean> 
+	    <!-- bean的生命周期 -->
+	    <bean id="lifeCycle" class="spring.ioc.lifecycle.BeanLifeCycle" init-method="init" destroy-method="detroy">
+	       <property name="userDao" ref="userDao"></property>
+	    </bean>
+	    
+	    
+		</beans>
